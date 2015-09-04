@@ -89,6 +89,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;MANTIS_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)depends/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -119,6 +120,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;MANTIS_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)depends/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -146,15 +148,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\hooks\win_hooks.hpp" />
     <ClInclude Include="src\Mantis.hpp" />
     <ClInclude Include="src\misc\iinit.hpp" />
+    <ClInclude Include="src\misc\macros.hpp" />
     <ClInclude Include="src\misc\mantis_info.hpp" />
     <ClInclude Include="src\utils\logger.hpp" />
+    <ClInclude Include="src\utils\util.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\hooks\win\CreateWindowExA.cpp" />
+    <ClCompile Include="src\hooks\win_hooks.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Mantis.cpp" />
     <ClCompile Include="src\utils\logger.cpp" />
+    <ClCompile Include="src\utils\util.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

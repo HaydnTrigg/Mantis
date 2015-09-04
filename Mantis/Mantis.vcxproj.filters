@@ -5,10 +5,16 @@
     <ClInclude Include="src\utils\logger.hpp" />
     <ClInclude Include="src\misc\iinit.hpp" />
     <ClInclude Include="src\misc\mantis_info.hpp" />
+    <ClInclude Include="src\utils\util.hpp" />
+    <ClInclude Include="src\hooks\win_hooks.hpp" />
+    <ClInclude Include="src\misc\macros.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Mantis.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\utils\logger.cpp" />
+    <ClCompile Include="src\utils\util.cpp" />
+    <ClCompile Include="src\hooks\win_hooks.cpp" />
+    <ClCompile Include="src\hooks\win\CreateWindowExA.cpp" />
   </ItemGroup>
 </Project>
