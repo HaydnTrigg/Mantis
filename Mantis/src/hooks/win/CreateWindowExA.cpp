@@ -1,3 +1,4 @@
+#include <rendering/web_renderer.hpp>
 #include <hooks/win_hooks.hpp>
 #include <misc/mantis_info.hpp>
 #include <Windows.h>
@@ -12,15 +13,15 @@ HookedFunction(win_hooks, HWND, CreateWindowExA, __stdcall, DWORD dwExStyle, LPC
 	auto s_Ret = o_CreateWindowExA(dwExStyle, lpClassName, s_version.c_str(), dwStyle, X, Y, nWidth, nHeight, hwndParent, hMenu, hInstance, lpParam);
 	auto s_ThreadId = GetWindowThreadProcessId(s_Ret, NULL);
 
-	/*m_MouseHook = SetWindowsHookEx(WH_MOUSE, hkMouseProc, NULL, s_ThreadId);
-	if (!m_MouseHook)
+	m_mouseHook = SetWindowsHookEx(WH_MOUSE, hook_mouseProc, NULL, s_ThreadId);
+	if (!m_mouseHook)
 		WriteLog("Mouse hook failed (%x).", GetLastError());
 
-	m_WindowHook = SetWindowsHookEx(WH_CALLWNDPROCRET, hkWindowProc, NULL, s_ThreadId);
-	if (!m_WindowHook)
+	m_windowHook = SetWindowsHookEx(WH_CALLWNDPROCRET, hook_windowProc, NULL, s_ThreadId);
+	if (!m_windowHook)
 		WriteLog("Window hook failed (%x).", GetLastError());
 
-	Rendering::web_renderer::GetInstance()->Resize(nWidth, nHeight);*/
+	rendering::web_renderer::getInstance()->resize(nWidth, nHeight);
 
 	return s_Ret;
 }

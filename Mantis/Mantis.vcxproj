@@ -128,6 +128,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(ProjectDir)depends/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,19 +149,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\hooks\engine_hooks.hpp" />
     <ClInclude Include="src\hooks\win_hooks.hpp" />
     <ClInclude Include="src\Mantis.hpp" />
     <ClInclude Include="src\misc\iinit.hpp" />
     <ClInclude Include="src\misc\macros.hpp" />
     <ClInclude Include="src\misc\mantis_info.hpp" />
+    <ClInclude Include="src\rendering\web_renderer.hpp" />
     <ClInclude Include="src\utils\logger.hpp" />
     <ClInclude Include="src\utils\util.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\hooks\engine\halo_gameTick.cpp" />
+    <ClCompile Include="src\hooks\engine_hooks.cpp" />
+    <ClCompile Include="src\hooks\input\mouseProc.cpp" />
+    <ClCompile Include="src\hooks\input\windowProc.cpp" />
+    <ClCompile Include="src\hooks\rendering\D3DDevice9_BeginScene.cpp" />
+    <ClCompile Include="src\hooks\rendering\D3DDevice9_EndScene.cpp" />
+    <ClCompile Include="src\hooks\rendering\D3DDevice9_Reset.cpp" />
+    <ClCompile Include="src\hooks\rendering\IDirect3D9_CreateDevice.cpp" />
     <ClCompile Include="src\hooks\win\CreateWindowExA.cpp" />
+    <ClCompile Include="src\hooks\win\__security_check_cookie.cpp" />
     <ClCompile Include="src\hooks\win_hooks.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Mantis.cpp" />
+    <ClCompile Include="src\rendering\web_renderer.cpp" />
     <ClCompile Include="src\utils\logger.cpp" />
     <ClCompile Include="src\utils\util.cpp" />
   </ItemGroup>

@@ -1,12 +1,14 @@
 #include "Mantis.hpp"
 #include <utils/util.hpp>
 #include <utils/logger.hpp>
+#include <hooks/win_hooks.hpp>
+#include <hooks/engine_hooks.hpp>
 
 using namespace mantis;
 
 client* client::m_instance = nullptr;
 
-client::client()
+client::client() : m_winHooks(nullptr)
 {
 }
 
@@ -19,6 +21,7 @@ client* client::getInstance()
 
 void client::init()
 {
+	preInit();
 	//unsigned long s_baseAddress = 0;
 	//unsigned long s_baseSize = 0;
 
@@ -50,8 +53,10 @@ void client::init()
 	utils::util::patch_address(0x00B694C0, "\x6A\x02", 2);
 
 	// english patch
-	utils::util::patch_address(0x002B4FDB, "\x83\x3D\x8C\xF1\x27\x01\x00", 7);
-	utils::util::patch_address(0x002B4FE4, "\xC7\x05\x8C\xF1\x27\x01\x00", 7);
+	utils::util::patch_address(0x002B4FDB+6, "\x00", 1);
+	utils::util::patch_address(0x002B4FE4+6, "\x00", 1);
+
+	postInit();
 }
 
 void client::preInit()
@@ -60,4 +65,15 @@ void client::preInit()
 
 void client::postInit()
 {
+	// Initialize windows hooks
+	m_winHooks = new hooks::win_hooks;
+
+	if (m_winHooks)
+		m_winHooks->init();
+
+	// Initialize engine hooks
+	m_engineHooks = new hooks::engine_hooks;
+
+	if (m_engineHooks)
+		m_engineHooks->init();
 }
