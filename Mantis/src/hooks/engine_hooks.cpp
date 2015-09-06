@@ -5,6 +5,7 @@
 using namespace mantis::hooks;
 
 DeclareFunctionValue(engine_hooks, halo_gameTick);
+DeclareFunctionValue(engine_hooks, halo_verifyMapSignature);
 
 void engine_hooks::init()
 {	
@@ -12,4 +13,6 @@ void engine_hooks::init()
 
 	// Hook halo_gameTick
 	DeclareHookAtOffset(halo_gameTick, s_baseAddress + 0x000B11A0);
+
+	DeclareHookAtOffset(halo_verifyMapSignature, s_baseAddress + 0x00829C0);
 }

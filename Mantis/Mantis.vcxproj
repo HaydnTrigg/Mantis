@@ -127,7 +127,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(ProjectDir)depends/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)depends/lib;P:\boost_library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d3d9.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -156,11 +156,18 @@
     <ClInclude Include="src\misc\macros.hpp" />
     <ClInclude Include="src\misc\mantis_info.hpp" />
     <ClInclude Include="src\rendering\web_renderer.hpp" />
+    <ClInclude Include="src\sdk\cameras\c_camera.hpp" />
+    <ClInclude Include="src\sdk\engine\e_gametype.hpp" />
+    <ClInclude Include="src\sdk\engine\variants\c_game_engine_base_variant.hpp" />
+    <ClInclude Include="src\sdk\engine\variants\c_game_engine_sandbox_variant.hpp" />
     <ClInclude Include="src\utils\logger.hpp" />
+    <ClInclude Include="src\utils\settings.hpp" />
     <ClInclude Include="src\utils\util.hpp" />
+    <ClInclude Include="src\web\web_client.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hooks\engine\halo_gameTick.cpp" />
+    <ClCompile Include="src\hooks\engine\halo_verifyMapSignature.cpp" />
     <ClCompile Include="src\hooks\engine_hooks.cpp" />
     <ClCompile Include="src\hooks\input\mouseProc.cpp" />
     <ClCompile Include="src\hooks\input\windowProc.cpp" />
@@ -175,7 +182,9 @@
     <ClCompile Include="src\Mantis.cpp" />
     <ClCompile Include="src\rendering\web_renderer.cpp" />
     <ClCompile Include="src\utils\logger.cpp" />
+    <ClCompile Include="src\utils\settings.cpp" />
     <ClCompile Include="src\utils\util.cpp" />
+    <ClCompile Include="src\web\web_client.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

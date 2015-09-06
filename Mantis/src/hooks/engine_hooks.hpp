@@ -8,6 +8,7 @@ namespace mantis
 		class engine_hooks : public iinit
 		{
 			DeclareFunction(int, halo_gameTick, __stdcall);
+			DeclareFunction(bool, halo_verifyMapSignature, __fastcall, void* This);
 
 		public:
 			void init() override;

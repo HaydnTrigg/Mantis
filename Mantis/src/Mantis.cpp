@@ -56,6 +56,8 @@ void client::init()
 	utils::util::patch_address(0x002B4FDB+6, "\x00", 1);
 	utils::util::patch_address(0x002B4FE4+6, "\x00", 1);
 
+	utils::util::patch_address(0x002AE8CB, "\x90\x90\x90\x90\x90", 5);
+
 	postInit();
 }
 

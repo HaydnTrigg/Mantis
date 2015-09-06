@@ -131,7 +131,7 @@ void web_renderer::render(LPDIRECT3DDEVICE9 p_device)
 
 	printText(m_sprite, m_font, m_mouseX, m_mouseY, D3DCOLOR_ARGB(255, 255, 0, 0), "X");
 
-	printText(m_sprite, m_font, 20, 300, D3DCOLOR_ARGB(255, 255, 40, 255), "Rendering");
+	printText(m_sprite, m_font, 20, 10, D3DCOLOR_ARGB(255, 255, 40, 255), "Mantis Client Alpha Build: http://kiwidog.me");
 
 	m_sprite->Flush();
 
