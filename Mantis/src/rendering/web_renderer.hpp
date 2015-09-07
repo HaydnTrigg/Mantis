@@ -1,6 +1,6 @@
 #pragma once
 #include <misc/iinit.hpp>
-#include <Awesomium/WebString.h>
+#include <Awesomium/JSObject.h>
 #include <Awesomium/JSArray.h>
 #include <d3d9.h>
 #include <d3dx9.h>
@@ -11,16 +11,19 @@
 // Forward declaration
 namespace Awesomium
 {
+	class WebString;
 	class WebCore;
 	class WebView;
+	
 };
 
 namespace mantis
 {
 	namespace rendering
 	{
-		class web_renderer : public iinit
-		{
+		class web_renderer : public iinit, public Awesomium::JSMethodHandler
+		{			
+		private:
 			static web_renderer* m_instance;
 			bool m_hasInit;
 			bool m_isResetting;
@@ -28,10 +31,13 @@ namespace mantis
 			// Awesomium
 			Awesomium::WebCore* m_core;
 			Awesomium::WebView* m_view;
+			Awesomium::JSObject m_appObject;
 
 			// Rendering width and height
 			unsigned long m_width;
 			unsigned long m_height;
+
+			RECT m_windowRect;
 
 			long m_mouseX;
 			long m_mouseY;
@@ -62,7 +68,13 @@ namespace mantis
 
 			// Logic
 			void update();
-			void onMethodCall(Awesomium::WebView* p_caller, unsigned int p_remoteObjectId, const Awesomium::WebString& p_methodName, const Awesomium::JSArray& p_args);
+
+			// Javascript interop
+			bool setElementContent(std::string p_elementName, std::string p_content);
+			bool setElementDisplay(std::string p_elementName, std::string p_display);
+
+			void OnMethodCall(Awesomium::WebView* caller, unsigned remote_object_id, const Awesomium::WebString& method_name, const Awesomium::JSArray& args) override;
+			Awesomium::JSValue OnMethodCallWithReturnValue(Awesomium::WebView* caller, unsigned remote_object_id, const Awesomium::WebString& method_name, const Awesomium::JSArray& args) override;
 
 		private:
 			web_renderer() : m_hasInit(false),

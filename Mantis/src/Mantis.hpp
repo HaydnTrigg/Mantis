@@ -18,5 +18,7 @@ namespace mantis
 		void init() override;
 		void preInit() override;
 		void postInit() override;
+
+		HWND m_mainWindow;
 	};
 }

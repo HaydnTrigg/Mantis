@@ -202,5 +202,5 @@ void web_client::handle_read_content(const boost::system::error_code& err)
 	auto s_Response = m_Response.str();
 	boost::replace_all(s_Response, "\r\n", "\n");
 
-	WriteLog("Response Buffer: %s", m_Response.str().c_str());
+	WriteLog("Response Buffer: %s", s_Response.c_str());
 }

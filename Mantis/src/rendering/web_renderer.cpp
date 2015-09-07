@@ -11,9 +11,12 @@
 #include <Awesomium/WebView.h>
 #include <Awesomium/WebCore.h>
 
+#include <misc/mantis_info.hpp>
+
 #pragma comment(lib, "awesomium.lib")
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
+#include <Mantis.hpp>
 
 
 using namespace Awesomium;
@@ -41,6 +44,12 @@ void web_renderer::preInit()
 	m_view = m_core->CreateWebView(m_width, m_height, nullptr, kWebViewType_Offscreen);
 	if (!m_view)
 		WriteLog("Awesomium view failed to create.");
+
+	m_view->set_js_method_handler(this);
+
+	m_appObject = m_view->CreateGlobalJavascriptObject(WSLit("app")).ToObject();
+
+	m_appObject.SetCustomMethod(WSLit("onMethodCall"), false);
 }
 
 void web_renderer::init()
@@ -52,14 +61,25 @@ void web_renderer::init()
 	// Call the pre-init tasks
 	preInit();
 
+	// After initialization call
+	postInit();
+}
+
+void web_renderer::postInit()
+{
+	// TODO: Put post init information here
+
+	// Set the version information
+	if (!m_view)
+		return;
+
 	// Get the ui directory
 	auto s_runningDirectory = getUiDirectory();
 	if (s_runningDirectory == "")
 		return;
 
-	// Get the default image location
-	auto s_LocalUi = "file://" + s_runningDirectory + "/mantisui/index.html";
-
+	// Get the default page location
+	auto s_LocalUi = "file://" + s_runningDirectory + "/mantisui/menu.html";
 	WriteLog("Loading %s", s_LocalUi.c_str());
 
 	// Tell our renderer to load the url
@@ -69,19 +89,18 @@ void web_renderer::init()
 	// Process and run all javascript that is pre-setup
 	update();
 
-	WriteLog("Started update thread.");
+	setElementContent("players-online", "2 Players Online");
+	setElementContent("friends-online", "0 friends online");
+
+	auto s_buildInfo = std::string("Build: ");
+	s_buildInfo.append(MANTIS_BUILD);
+
+	setElementContent("game-version", s_buildInfo);
+
+	WriteLog("WebRenderer Init.");
 
 	// Success
 	m_hasInit = true;
-
-	// After initialization call
-	postInit();
-}
-
-void web_renderer::postInit()
-{
-	// TODO: Put post init information here
-	WriteLog("WebRenderer Init.");
 }
 
 void web_renderer::render(LPDIRECT3DDEVICE9 p_device)
@@ -154,7 +173,7 @@ void web_renderer::render(LPDIRECT3DDEVICE9 p_device)
 	printText(m_sprite, m_font, m_mouseX, m_mouseY, D3DCOLOR_ARGB(255, 255, 0, 0), "X");
 
 	// TODO: Remove below
-	printText(m_sprite, m_font, 20, 10, D3DCOLOR_ARGB(255, 255, 40, 255), "Mantis Client Alpha Build: http://kiwidog.me");
+	//printText(m_sprite, m_font, 20, 10, D3DCOLOR_ARGB(255, 255, 40, 255), "Mantis Client Alpha Build: http://kiwidog.me");
 
 	// Ensure that our sprite finished
 	m_sprite->Flush();
@@ -235,6 +254,15 @@ void web_renderer::updateViewport(LPDIRECT3DDEVICE9 p_device)
 	auto s_ret = p_device->GetViewport(&m_viewport);
 	if (s_ret != D3D_OK)
 		WriteLog("Could not update the viewport.");
+
+	auto s_mainWindow = client::getInstance()->m_mainWindow;
+	if (!s_mainWindow)
+		return;
+
+	RECT s_rect;
+	s_ret = GetWindowRect(s_mainWindow, &m_windowRect);
+	if (!s_ret)
+		WriteLog("Coudl not update window position.");
 }
 
 void web_renderer::resize(unsigned long p_width, unsigned long p_height)
@@ -262,8 +290,8 @@ void web_renderer::updateMouse(long p_x, long p_y)
 	if (!m_view)
 		return;
 
-	m_mouseX = p_x;
-	m_mouseY = p_y;
+	m_mouseX = p_x - m_windowRect.left;
+	m_mouseY = p_y - m_windowRect.top;
 
 	m_view->InjectMouseMove(m_mouseX, m_mouseY);
 }
@@ -278,15 +306,6 @@ void web_renderer::click()
 	Sleep(20);
 
 	m_view->InjectMouseUp(kMouseButton_Left);
-}
-
-void web_renderer::onMethodCall(Awesomium::WebView* p_caller, unsigned p_remoteObjectId, const Awesomium::WebString& p_methodName, const Awesomium::JSArray& p_args)
-{
-	if (p_methodName == WSLit("onServerList"))
-	{
-		auto s_Value = p_args[0].ToString();
-		WriteLog("Message: %S", s_Value.data());
-	}
 }
 
 std::string web_renderer::getUiDirectory()
@@ -320,4 +339,57 @@ void web_renderer::update()
 	}
 
 	m_core->Update();
+}
+
+bool web_renderer::setElementContent(std::string p_elementName, std::string p_content)
+{
+	auto s_window = m_view->ExecuteJavascriptWithResult(WSLit("window"), WSLit(""));
+
+	if (s_window.IsObject())
+	{
+		JSArray s_args;
+		s_args.Push(WSLit(p_elementName.c_str()));
+		s_args.Push(WSLit(p_content.c_str()));
+
+		auto s_result = s_window.ToObject().Invoke(WSLit("setElementContent"), s_args);
+		if (s_result.IsBoolean())
+			return s_result.ToBoolean();
+	}
+
+	return false;
+}
+
+bool web_renderer::setElementDisplay(std::string p_elementName, std::string p_display)
+{
+	auto s_window = m_view->ExecuteJavascriptWithResult(WSLit("window"), WSLit(""));
+
+	if (s_window.IsObject())
+	{
+		JSArray s_args;
+		s_args.Push(WSLit(p_elementName.c_str()));
+		s_args.Push(WSLit(p_display.c_str()));
+
+		auto s_result = s_window.ToObject().Invoke(WSLit("setElementDisplay"), s_args);
+		if (s_result.IsBoolean())
+			return s_result.ToBoolean();
+	}
+
+	return false;
+}
+
+void web_renderer::OnMethodCall(Awesomium::WebView* caller, unsigned remote_object_id, const Awesomium::WebString& method_name, const Awesomium::JSArray& args)
+{
+	if (method_name == WSLit("onMethodCall"))
+	{
+		if (args.size() < 1)
+			return;
+
+		auto s_arg = Awesomium::ToString(args[0].ToString());
+		WriteLog("Method Call: %s", s_arg.c_str());
+	}
+}
+
+Awesomium::JSValue web_renderer::OnMethodCallWithReturnValue(Awesomium::WebView* caller, unsigned remote_object_id, const Awesomium::WebString& method_name, const Awesomium::JSArray& args)
+{
+	return JSValue::Undefined();
 }
