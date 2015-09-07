@@ -3,6 +3,7 @@
 #include <utils/logger.hpp>
 #include <hooks/win_hooks.hpp>
 #include <hooks/engine_hooks.hpp>
+#include "utils/settings.hpp"
 
 using namespace mantis;
 
@@ -63,6 +64,7 @@ void client::init()
 
 void client::preInit()
 {
+	utils::settings::getInstance()->init();
 }
 
 void client::postInit()

@@ -1,3 +1,5 @@
+#include <web/web_client.hpp>
+
 #include "web_renderer.hpp"
 #include <utils/logger.hpp>
 
@@ -13,6 +15,7 @@
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
 
+
 using namespace Awesomium;
 using namespace mantis::rendering;
 
@@ -26,6 +29,7 @@ web_renderer* web_renderer::getInstance()
 
 void web_renderer::preInit()
 {
+	// Initialize the web core
 	m_core = WebCore::Initialize(WebConfig());
 	if (!m_core)
 	{
@@ -33,6 +37,7 @@ void web_renderer::preInit()
 		return;
 	}
 
+	// Create an offscreen rendering view
 	m_view = m_core->CreateWebView(m_width, m_height, nullptr, kWebViewType_Offscreen);
 	if (!m_view)
 		WriteLog("Awesomium view failed to create.");
@@ -40,48 +45,59 @@ void web_renderer::preInit()
 
 void web_renderer::init()
 {
-
+	// Ensure that if we have already initialized, that we don't over again.
 	if (m_hasInit)
 		return;
 
+	// Call the pre-init tasks
 	preInit();
 
+	// Get the ui directory
 	auto s_runningDirectory = getUiDirectory();
 	if (s_runningDirectory == "")
 		return;
 
+	// Get the default image location
 	auto s_LocalUi = "file://" + s_runningDirectory + "/mantisui/index.html";
 
 	WriteLog("Loading %s", s_LocalUi.c_str());
 
+	// Tell our renderer to load the url
 	WebURL s_Url(WSLit(s_LocalUi.c_str()));
 	m_view->LoadURL(s_Url);
 
+	// Process and run all javascript that is pre-setup
 	update();
 
 	WriteLog("Started update thread.");
 
+	// Success
 	m_hasInit = true;
 
+	// After initialization call
 	postInit();
 }
 
 void web_renderer::postInit()
 {
+	// TODO: Put post init information here
 	WriteLog("WebRenderer Init.");
 }
 
 void web_renderer::render(LPDIRECT3DDEVICE9 p_device)
 {
+	// Init if we start rendering without it being setup
 	if (!m_hasInit)
 		init();
 
+	// This shoulnd't happen, but just incase...
 	if (!p_device)
 	{
 		WriteLog("Device is invalid.");
 		return;
 	}
 
+	// Sprite, font, texture creation
 	if (!m_sprite)
 		D3DXCreateSprite(p_device, &m_sprite);
 
@@ -105,6 +121,7 @@ void web_renderer::render(LPDIRECT3DDEVICE9 p_device)
 		return;
 	}
 
+	// Get the surface
 	auto s_surface = static_cast<BitmapSurface*>(m_view->surface());
 	if (!s_surface)
 	{
@@ -112,10 +129,12 @@ void web_renderer::render(LPDIRECT3DDEVICE9 p_device)
 		return;
 	}
 
+	// Some d3d voodoo magic
 	D3DLOCKED_RECT s_rect;
 	auto s_ret = m_texture->LockRect(0, &s_rect, nullptr, D3DLOCK_DISCARD);
 	if (SUCCEEDED(s_ret))
 	{
+		// Copy all of the bits to our d3drect
 		s_surface->CopyTo(static_cast<unsigned char*>(s_rect.pBits), m_width * 4, 4, true, false);
 
 		m_texture->UnlockRect(0);
@@ -125,17 +144,31 @@ void web_renderer::render(LPDIRECT3DDEVICE9 p_device)
 		WriteLog("Could not lock rect.");
 	}
 
+	// Begin rendering our sprite
 	m_sprite->Begin(D3DXSPRITE_ALPHABLEND);
 
+	// Draw the web ui on screen
 	m_sprite->Draw(m_texture, nullptr, nullptr, &D3DXVECTOR3(0, 0, 0), 0xFFFFFFFF);
 
+	// Draw ghetto mouse pointer
 	printText(m_sprite, m_font, m_mouseX, m_mouseY, D3DCOLOR_ARGB(255, 255, 0, 0), "X");
 
+	// TODO: Remove below
 	printText(m_sprite, m_font, 20, 10, D3DCOLOR_ARGB(255, 255, 40, 255), "Mantis Client Alpha Build: http://kiwidog.me");
 
+	// Ensure that our sprite finished
 	m_sprite->Flush();
 
+	// End rendering the sprite
 	m_sprite->End();
+
+	// TODO: Remove below
+	if (GetAsyncKeyState(VK_F2) & 0x8000)
+	{
+		auto s_webClient = std::make_shared<web::web_client>();
+		s_webClient->connect();
+		Sleep(50);
+	}
 }
 
 void web_renderer::printText(LPD3DXSPRITE p_sprite, LPD3DXFONT p_font, long p_x, long p_y, D3DCOLOR p_fontColor, char* p_format, ...)
