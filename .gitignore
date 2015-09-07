@@ -213,3 +213,4 @@ ModelManifest.xml
 
 # Ignore boost
 Mantis/depends/inc/boost/*
+Mantis/depends/lib/libboost*
