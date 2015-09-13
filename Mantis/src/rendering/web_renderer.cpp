@@ -12,15 +12,20 @@
 #include <Awesomium/WebCore.h>
 
 #include <misc/mantis_info.hpp>
+#include <Mantis.hpp>
+
+#include <list>
+#include <memory>
 
 #pragma comment(lib, "awesomium.lib")
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
-#include <Mantis.hpp>
 
+std::list<std::shared_ptr<mantis::web::web_client>> m_pendingRequests;
 
 using namespace Awesomium;
 using namespace mantis::rendering;
+
 
 web_renderer* web_renderer::m_instance = nullptr;
 web_renderer* web_renderer::getInstance()
@@ -98,6 +103,17 @@ void web_renderer::postInit()
 	setElementContent("game-version", s_buildInfo);
 
 	WriteLog("WebRenderer Init.");
+
+
+	auto s_webClient = std::make_shared<web::web_client>([this](int p_err, std::string p_data)
+	{
+		WriteLog("Output:%d %s", p_err, p_data.c_str());
+	});
+	s_webClient->connect("localhost", "/api/info");
+
+	m_pendingRequests.push_back(s_webClient);
+
+	Sleep(50);
 
 	// Success
 	m_hasInit = true;
@@ -180,14 +196,6 @@ void web_renderer::render(LPDIRECT3DDEVICE9 p_device)
 
 	// End rendering the sprite
 	m_sprite->End();
-
-	// TODO: Remove below
-	if (GetAsyncKeyState(VK_F2) & 0x8000)
-	{
-		auto s_webClient = std::make_shared<web::web_client>();
-		s_webClient->connect();
-		Sleep(50);
-	}
 }
 
 void web_renderer::printText(LPD3DXSPRITE p_sprite, LPD3DXFONT p_font, long p_x, long p_y, D3DCOLOR p_fontColor, char* p_format, ...)
