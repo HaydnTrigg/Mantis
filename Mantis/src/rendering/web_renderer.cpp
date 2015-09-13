@@ -377,6 +377,39 @@ bool web_renderer::setElementDisplay(std::string p_elementName, std::string p_di
 	return false;
 }
 
+bool mantis::rendering::web_renderer::showNotification(std::string p_title, std::string p_info)
+{
+	auto s_window = m_view->ExecuteJavascriptWithResult(WSLit("window"), WSLit(""));
+
+	if (s_window.IsObject())
+	{
+		JSArray s_args;
+		s_args.Push(WSLit(p_title.c_str()));
+		s_args.Push(WSLit(p_info.c_str()));
+
+		auto s_result = s_window.ToObject().Invoke(WSLit("showNotification"), s_args);
+		if (s_result.IsBoolean())
+			return s_result.ToBoolean();
+	}
+	return false;
+}
+
+bool mantis::rendering::web_renderer::loadMenu(std::string p_pagePath)
+{
+	auto s_window = m_view->ExecuteJavascriptWithResult(WSLit("window"), WSLit(""));
+
+	if (s_window.IsObject())
+	{
+		JSArray s_args;
+		s_args.Push(WSLit(p_pagePath.c_str()));
+
+		auto s_result = s_window.ToObject().Invoke(WSLit("loadMenu"), s_args);
+		if (s_result.IsBoolean())
+			return s_result.ToBoolean();
+	}
+	return false;
+}
+
 void web_renderer::OnMethodCall(Awesomium::WebView* caller, unsigned remote_object_id, const Awesomium::WebString& method_name, const Awesomium::JSArray& args)
 {
 	if (method_name == WSLit("onMethodCall"))

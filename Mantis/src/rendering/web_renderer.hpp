@@ -72,6 +72,8 @@ namespace mantis
 			// Javascript interop
 			bool setElementContent(std::string p_elementName, std::string p_content);
 			bool setElementDisplay(std::string p_elementName, std::string p_display);
+			bool showNotification(std::string p_title, std::string p_info);
+			bool loadMenu(std::string p_pagePath);
 
 			void OnMethodCall(Awesomium::WebView* caller, unsigned remote_object_id, const Awesomium::WebString& method_name, const Awesomium::JSArray& args) override;
 			Awesomium::JSValue OnMethodCallWithReturnValue(Awesomium::WebView* caller, unsigned remote_object_id, const Awesomium::WebString& method_name, const Awesomium::JSArray& args) override;
