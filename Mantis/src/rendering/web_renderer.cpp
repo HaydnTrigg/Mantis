@@ -39,9 +39,14 @@ void web_renderer::preInit()
 		WriteLog("Awesomium core failed to initalize.");
 		return;
 	}
+	
+	WebPreferences s_preferences;
+	s_preferences.allow_file_access_from_file_url;
+
+	auto s_session = m_core->CreateWebSession(WSLit("./mantisui/"), s_preferences);
 
 	// Create an offscreen rendering view
-	m_view = m_core->CreateWebView(m_width, m_height, nullptr, kWebViewType_Offscreen);
+	m_view = m_core->CreateWebView(m_width, m_height, s_session, kWebViewType_Offscreen);
 	if (!m_view)
 		WriteLog("Awesomium view failed to create.");
 
