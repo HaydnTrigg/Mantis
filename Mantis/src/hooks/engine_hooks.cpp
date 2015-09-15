@@ -12,7 +12,7 @@ void engine_hooks::init()
 	auto s_baseAddress = reinterpret_cast<unsigned long>(GetModuleHandle(nullptr));
 
 	// Hook halo_gameTick
-	DeclareHookAtOffset(halo_gameTick, s_baseAddress + 0x000B11A0);
+	DeclareHookAtOffset(halo_gameTick, s_baseAddress + 0x000B18A0);
 
-	DeclareHookAtOffset(halo_verifyMapSignature, s_baseAddress + 0x00829C0);
+	DeclareHookAtOffset(halo_verifyMapSignature, s_baseAddress + 0x0082D10);
 }

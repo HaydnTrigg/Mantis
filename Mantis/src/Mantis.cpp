@@ -51,13 +51,13 @@ void client::init()
 	//}
 
 	// fmod init wsapi pop fix
-	utils::util::patch_address(0x00B694C0, "\x6A\x02", 2);
+	utils::util::patch_address(0x00B78542, "\x6A\x02", 2);
 
 	// english patch
-	utils::util::patch_address(0x002B4FDB+6, "\x00", 1);
-	utils::util::patch_address(0x002B4FE4+6, "\x00", 1);
+	utils::util::patch_address(0x002B90EB+6, "\x00", 1);
+	utils::util::patch_address(0x002B90F4+6, "\x00", 1);
 
-	utils::util::patch_address(0x002AE8CB, "\x90\x90\x90\x90\x90", 5);
+	utils::util::patch_address(0x002B0B1B, "\x90\x90\x90\x90\x90", 5);
 
 	postInit();
 }

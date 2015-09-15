@@ -41,9 +41,16 @@ void web_renderer::preInit()
 	}
 	
 	WebPreferences s_preferences;
-	s_preferences.allow_file_access_from_file_url;
+	s_preferences.allow_file_access_from_file_url = true;
 
-	auto s_session = m_core->CreateWebSession(WSLit("./mantisui/"), s_preferences);
+	auto s_runningDirectory = getUiDirectory();
+	if (s_runningDirectory == "")
+		return;
+
+	// Get the default page location
+	auto s_LocalUi = "file://" + s_runningDirectory + "mantisui/container.html";
+
+	auto s_session = m_core->CreateWebSession(WSLit(s_LocalUi.c_str()), s_preferences);
 
 	// Create an offscreen rendering view
 	m_view = m_core->CreateWebView(m_width, m_height, s_session, kWebViewType_Offscreen);
@@ -84,7 +91,7 @@ void web_renderer::postInit()
 		return;
 
 	// Get the default page location
-	auto s_LocalUi = "file://" + s_runningDirectory + "/mantisui/menu.html";
+	auto s_LocalUi = "file://" + s_runningDirectory + "/mantisui/container.html";
 	WriteLog("Loading %s", s_LocalUi.c_str());
 
 	// Tell our renderer to load the url
@@ -92,6 +99,10 @@ void web_renderer::postInit()
 	m_view->LoadURL(s_Url);
 
 	// Process and run all javascript that is pre-setup
+	update();
+
+	loadMenu("menu.html");
+
 	update();
 
 	setElementContent("players-online", "2 Players Online");
