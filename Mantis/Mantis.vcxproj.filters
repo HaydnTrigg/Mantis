@@ -16,6 +16,7 @@
     <ClInclude Include="src\sdk\engine\variants\c_game_engine_base_variant.hpp" />
     <ClInclude Include="src\sdk\engine\variants\c_game_engine_sandbox_variant.hpp" />
     <ClInclude Include="src\sdk\engine\e_gametype.hpp" />
+    <ClInclude Include="src\patches\engine_patches.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Mantis.cpp" />
@@ -37,5 +38,6 @@
     <ClCompile Include="src\web\web_client.cpp" />
     <ClCompile Include="src\hooks\engine\halo_verifyMapSignature.cpp" />
     <ClCompile Include="src\utils\settings.cpp" />
+    <ClCompile Include="src\patches\engine_patches.cpp" />
   </ItemGroup>
 </Project>

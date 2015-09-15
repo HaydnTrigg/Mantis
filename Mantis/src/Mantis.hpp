@@ -10,6 +10,7 @@ namespace mantis
 
 		iinit* m_winHooks;
 		iinit* m_engineHooks;
+		iinit* m_enginePatches;
 
 		client();
 	public:

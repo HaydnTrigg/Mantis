@@ -155,6 +155,7 @@
     <ClInclude Include="src\misc\iinit.hpp" />
     <ClInclude Include="src\misc\macros.hpp" />
     <ClInclude Include="src\misc\mantis_info.hpp" />
+    <ClInclude Include="src\patches\engine_patches.hpp" />
     <ClInclude Include="src\rendering\web_renderer.hpp" />
     <ClInclude Include="src\sdk\cameras\c_camera.hpp" />
     <ClInclude Include="src\sdk\engine\e_gametype.hpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="src\hooks\win_hooks.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Mantis.cpp" />
+    <ClCompile Include="src\patches\engine_patches.cpp" />
     <ClCompile Include="src\rendering\web_renderer.cpp" />
     <ClCompile Include="src\utils\logger.cpp" />
     <ClCompile Include="src\utils\settings.cpp" />
