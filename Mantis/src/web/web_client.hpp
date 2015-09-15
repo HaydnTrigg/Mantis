@@ -10,31 +10,33 @@ namespace mantis
 	{
 		class web_client
 		{
-		private:
-			static web_client* m_Instance;
-			boost::asio::io_service io_service;
-			tcp::resolver resolver_;
-			tcp::socket socket_;
-			boost::asio::streambuf request_;
-			boost::asio::streambuf response_;
-			std::stringstream m_Response;
+			boost::asio::io_service m_service;
+			tcp::resolver m_resolver;
+			tcp::socket m_socket;
+			boost::asio::streambuf m_request;
+			boost::asio::streambuf m_response;
+			std::stringstream m_responseStream;
+
+			std::function<void(int, std::string)> m_callback;
 
 		public:
-			static web_client* GetInstance();
 			web_client();
+			web_client(std::function<void(int, std::string)> p_dataCallback);
+
 			~web_client();
 
-			void connect();
+			void connect(std::string p_server, std::string p_path);
 
 		private:
-			void handle_resolve(const boost::system::error_code& err,
+			void send_callback(int p_error, std::string p_data = "");
+			void handle_resolve(const boost::system::error_code& p_err,
 				tcp::resolver::iterator endpoint_iterator);
-			void handle_connect(const boost::system::error_code& err,
+			void handle_connect(const boost::system::error_code& p_err,
 				tcp::resolver::iterator endpoint_iterator);
-			void handle_write_request(const boost::system::error_code& err);
-			void handle_read_status_line(const boost::system::error_code& err);
-			void handle_read_headers(const boost::system::error_code& err);
-			void handle_read_content(const boost::system::error_code& err);
+			void handle_write_request(const boost::system::error_code& p_err);
+			void handle_read_status_line(const boost::system::error_code& p_err);
+			void handle_read_headers(const boost::system::error_code& p_err);
+			void handle_read_content(const boost::system::error_code& p_err);
 		};
 	}
 }
