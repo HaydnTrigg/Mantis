@@ -204,9 +204,6 @@ void web_renderer::render(LPDIRECT3DDEVICE9 p_device)
 	// Draw ghetto mouse pointer
 	printText(m_sprite, m_font, m_mouseX, m_mouseY, D3DCOLOR_ARGB(255, 255, 0, 0), "X");
 
-	// TODO: Remove below
-	//printText(m_sprite, m_font, 20, 10, D3DCOLOR_ARGB(255, 255, 40, 255), "Mantis Client Alpha Build: http://kiwidog.me");
-
 	// Ensure that our sprite finished
 	m_sprite->Flush();
 
