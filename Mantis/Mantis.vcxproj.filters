@@ -17,6 +17,9 @@
     <ClInclude Include="src\sdk\engine\variants\c_game_engine_sandbox_variant.hpp" />
     <ClInclude Include="src\sdk\engine\e_gametype.hpp" />
     <ClInclude Include="src\patches\engine_patches.hpp" />
+    <ClInclude Include="src\sdk\backend\i_h3a_request.hpp" />
+    <ClInclude Include="src\sdk\messages\c_message.h" />
+    <ClInclude Include="src\sdk\messages\c_load_screen_message.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Mantis.cpp" />
