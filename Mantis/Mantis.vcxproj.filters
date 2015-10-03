@@ -20,6 +20,7 @@
     <ClInclude Include="src\sdk\backend\i_h3a_request.hpp" />
     <ClInclude Include="src\sdk\messages\c_message.h" />
     <ClInclude Include="src\sdk\messages\c_load_screen_message.h" />
+    <ClInclude Include="src\local\user.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Mantis.cpp" />
@@ -42,5 +43,6 @@
     <ClCompile Include="src\hooks\engine\halo_verifyMapSignature.cpp" />
     <ClCompile Include="src\utils\settings.cpp" />
     <ClCompile Include="src\patches\engine_patches.cpp" />
+    <ClCompile Include="src\local\user.cpp" />
   </ItemGroup>
 </Project>

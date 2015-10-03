@@ -1,5 +1,6 @@
 #include <hooks/engine_hooks.hpp>
 #include <rendering/web_renderer.hpp>
+#include <local/user.hpp>
 
 using namespace mantis::hooks;
 
@@ -16,5 +17,10 @@ HookedFunction(engine_hooks, int, halo_gameTick, __stdcall)
 		Sleep(20);
 	}
 
+	if (GetAsyncKeyState(VK_F3) & 0x8000)
+	{
+		auto s_user = std::make_shared<local::user>();
+		s_user->calculateHash(L"fuckboy");
+	}
 	return s_Ret;
 }

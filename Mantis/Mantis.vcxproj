@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClInclude Include="src\hooks\engine_hooks.hpp" />
     <ClInclude Include="src\hooks\win_hooks.hpp" />
+    <ClInclude Include="src\local\user.hpp" />
     <ClInclude Include="src\Mantis.hpp" />
     <ClInclude Include="src\misc\iinit.hpp" />
     <ClInclude Include="src\misc\macros.hpp" />
@@ -182,6 +183,7 @@
     <ClCompile Include="src\hooks\win\CreateWindowExA.cpp" />
     <ClCompile Include="src\hooks\win\__security_check_cookie.cpp" />
     <ClCompile Include="src\hooks\win_hooks.cpp" />
+    <ClCompile Include="src\local\user.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Mantis.cpp" />
     <ClCompile Include="src\patches\engine_patches.cpp" />
